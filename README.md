@@ -16,27 +16,28 @@
 
 ---
 
-##  Table of Contents
+## Table of Contents
 
-- [Problem Statement](#-problem-statement)
-- [Novelty & Key Themes](#-novelty--key-themes)
-- [Features](#-features)
-- [Methodology / How It Works](#-methodology--how-it-works)
-- [Architecture](#-architecture)
-- [Tech Stack](#-tech-stack)
-- [Installation & Usage](#-installation--usage)
-- [Project Structure](#-project-structure)
-- [Screenshots / Demo](#-screenshots--demo)
-- [Team](#-team)
-- [Mentor](#-mentor)
-- [Institution](#-institution)
-- [Acknowledgments](#-acknowledgments)
-- [Future Work](#-future-work)
-- [License](#-license)
+- [Problem Statement](#problem-statement)
+- [Novelty & Key Themes](#novelty--key-themes)
+- [Features](#features)
+- [Methodology / How It Works](#methodology--how-it-works)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Installation & Usage](#installation--usage)
+- [Project Structure](#project-structure)
+- [Screenshots](#screenshots)
+- [Team](#team)
+- [Mentor](#mentor)
+- [Institution](#institution)
+- [Acknowledgments](#acknowledgments)
+- [Future Work](#future-work)
+- [License](#license)
 
 ---
 
-##  Problem Statement
+<a id="problem-statement"></a>
+## Problem Statement
 
 Floods remain one of the most destructive and recurring natural hazards worldwide. Climate variability, extreme rainfall, changing river dynamics, and rapid urbanization continue to increase vulnerability in flood-prone regions. In many areas, communities and disaster-response agencies lack fast, reliable access to interpretable flood risk insight — making it difficult to prioritize resources and act before conditions worsen.
 
@@ -44,6 +45,7 @@ Floods remain one of the most destructive and recurring natural hazards worldwid
 
 ---
 
+<a id="novelty-key-themes"></a>
 ## Novelty & Key Themes
 
 FloodGuard AI distinguishes itself through:
@@ -56,27 +58,35 @@ FloodGuard AI distinguishes itself through:
 
 ---
 
-## ✨ Features
+<a id="features"></a>
+## Features
 
 ### Plots
+
 Interactive bubble-plot visualizations across India, built from precipitation, wind speed, humidity, temperature, cloud cover, and historical data:
-- **Flood Prediction Plot** — ML-predicted flood locations, marked with red dots.
-- **Precipitation Plot** — current national precipitation, with bubble size indicating rainfall volume.
+
+- **Flood Prediction Plot** — machine-learning-predicted flood locations, marked with red dots.
+- **Precipitation Plot** — current precipitation intensity, with bubble size indicating rainfall volume.
 - **Damage Analysis Plot** — estimated monetary damage (USD) per location, sized by predicted flood risk and population.
 
-###  Heatmaps
+### Heatmaps
+
 Continuous colorscale heatmaps covering the same three domains:
+
 - **Damage Analysis Heatmap** — color intensity reflects predicted monetary damage.
 - **Precipitation Heatmap** — darker red indicates higher precipitation volume.
 - **Flood Prediction Heatmap** — darker red zones indicate higher flood likelihood based on current environmental factors.
 
-###  Satellite Image Analysis
-Geo-referenced precipitation imagery per city and month, generated from NASA's **Global Precipitation Measurement (GPM)** netCDF4 datasets using `numpy`, `matplotlib`, and `cartopy` — rendered directly in the web application.
+### Satellite Image Analysis
 
-###  Predict Page
-Enter any city name globally. FloodGuard AI fetches real-time weather data, feeds it into the ML model, and instantly returns:
+Geo-referenced precipitation imagery per city and month, generated from NASA's **Global Precipitation Measurement (GPM)** netCDF4 datasets using `numpy`, `matplotlib`, and `cartopy`, and rendered directly in the web application.
+
+### Predict Page
+
+Enter any city name globally. FloodGuard AI fetches real-time weather data, feeds it into the machine-learning model, and instantly returns:
+
 - Flood risk prediction
-- Temperature & max temperature
+- Temperature and maximum temperature
 - Humidity
 - Cloud cover
 - Wind speed
@@ -84,18 +94,20 @@ Enter any city name globally. FloodGuard AI fetches real-time weather data, feed
 
 ---
 
-##  Methodology / How It Works
+<a id="methodology-how-it-works"></a>
+## Methodology / How It Works
 
-1. **Data Acquisition** — Pull real-time weather data, historical flood records, and NASA GPM satellite precipitation data.
-2. **Preprocessing** — Clean, normalize, and geospatially align data across sources (precipitation, temperature, humidity, wind speed, cloud cover).
-3. **Machine Learning Inference** — Feed processed features into trained models to estimate flood probability and projected damage.
-4. **Prediction Generation** — Produce per-location flood, rainfall, and damage predictions.
-5. **Visualization** — Render results as bubble plots, heatmaps, and satellite overlays through the Flask web interface.
-6. **Decision Support** — Present interpretable outputs for both technical analysts and emergency response decision-makers.
+1. **Data acquisition** — pull real-time weather data, historical flood records, and NASA GPM satellite precipitation data.
+2. **Preprocessing** — clean, normalize, and geospatially align data across sources such as precipitation, temperature, humidity, wind speed, and cloud cover.
+3. **Machine learning inference** — feed processed features into trained models to estimate flood probability and projected damage.
+4. **Prediction generation** — produce per-location flood, rainfall, and damage predictions.
+5. **Visualization** — render results as bubble plots, heatmaps, and satellite overlays through the Flask web interface.
+6. **Decision support** — present interpretable outputs for both technical analysts and emergency response decision-makers.
 
 ---
 
-##  Architecture
+<a id="architecture"></a>
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -103,7 +115,7 @@ flowchart LR
     B[ Real-time Weather APIs] --> D
     C[ Historical Flood Records] --> D
 
-    D --> E[🤖 Machine Learning Models]
+    D --> E[Machine Learning Models]
     E --> F[Flood Risk Prediction]
     E --> G[Damage Estimation]
     E --> H[Rainfall Prediction]
@@ -112,12 +124,12 @@ flowchart LR
     G --> I
     H --> I
 
-    I --> J[📊 Plots]
-    I --> K[🗺️ Heatmaps]
-    I --> L[🛰️ Satellite Image Viewer]
-    I --> M[🔍 Predict Page]
+    I --> J[Plots]
+    I --> K[Heatmaps]
+    I --> L[Satellite Image Viewer]
+    I --> M[Predict Page]
 
-    J --> N[👤 End Users / Agencies]
+    J --> N[End Users / Agencies]
     K --> N
     L --> N
     M --> N
@@ -125,10 +137,11 @@ flowchart LR
 
 ---
 
-##  Tech Stack
+<a id="tech-stack"></a>
+## Tech Stack
 
 | Category | Technologies |
-|---|---|
+| --- | --- |
 | **Language** | Python 3.9+ |
 | **Web Framework** | Flask |
 | **Machine Learning** | scikit-learn / ML pipelines |
@@ -140,89 +153,94 @@ flowchart LR
 
 ---
 
+<a id="installation-usage"></a>
 ## Installation & Usage
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/<your-org>/floodguard-ai.git
+git clone <repository-url>
 cd floodguard-ai
 
-# 2. Create and activate a virtual environment
 python -m venv venv
-source venv/bin/activate      # On Windows: venv\Scripts\activate
+source venv/bin/activate      # On Windows: venv\\Scripts\\activate
 
-# 3. Install dependencies
 pip install -r requirements.txt
-
-# 4. Run the application
 python app.py
 ```
 
 Once running, open your browser and navigate to:
 
-```
+```text
 http://127.0.0.1:5000
 ```
 
-You're all set — explore **Plots**, **Heatmaps**, **Satellite Images**, and the **Predict** page.
+You are ready to explore **Plots**, **Heatmaps**, **Satellite Images**, and the **Predict** page.
 
 ---
 
-##  Project Structure
+<a id="project-structure"></a>
+## Project Structure
 
-```
+```text
 floodguard-ai/
-├── app.py                     
-├── requirements.txt           
-├── models/                    
-├── data/                     
-├── static/                    
-├── templates/                  
-├── utils/                    
+├── app.py
+├── requirements.txt
+├── Procfile
+├── data_manipulation_scripts/
+├── processed_satellite_images/
+├── static/
+├── templates/
+├── training/
+├── doc/Screenshots/
 └── README.md
 ```
 
 ---
 
-## Screenshots / Demo
+<a id="screenshots"></a>
+## Screenshots
 
-> *Add real screenshots or a demo GIF here before publishing.*
+The project includes a set of representative screenshots that showcase the platform's main interfaces and data visualizations.
 
-| Page | Description |
-|---|---|
-| `docs/screenshots/plots.png` | Bubble plots showing flood, precipitation, and damage predictions across India |
-| `docs/screenshots/heatmaps.png` | Colorscale heatmaps for flood risk, rainfall, and damage estimation |
-| `docs/screenshots/satellite.png` | Geo-referenced satellite precipitation imagery for a selected city/month |
-| `docs/screenshots/predict.png` | Predict page showing real-time flood risk results for a searched city |
+| Page | Image |
+| --- | --- |
+| Home | ![FloodGuard AI homepage](doc/Screenshots/home.png) |
+| Plots | ![FloodGuard AI plots page](doc/Screenshots/plots.png) |
+| Heatmaps | ![FloodGuard AI heatmaps page](doc/Screenshots/heatmaps.png) |
+| Satellite | ![FloodGuard AI satellite analysis page](doc/Screenshots/satellite.png) |
+| Predict | ![FloodGuard AI prediction page](doc/Screenshots/predict.png) |
 
 ---
 
-## 👥 Team
+<a id="team"></a>
+## Team
 
 | Name | Role | Department | Roll No. |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | **Chandan Kumar Sah** | Team Lead | AI/Machine Learning | 24AM070 |
-| **Saurav Shah Teli** | Team Member | CSE (D) | 24CS290 |
-| **Sitesh Kumar Paswan** | Team Member | IT | 24IT131  |
+| **Saurav Shah Teli** | Team Member | Computer Science and Engineering | 24CS290 |
+| **Sitesh Kumar Paswan** | Team Member | Information Technology | 24IT131 |
 
-**Department:** CSE (Artificial Intelligence and Machine Learning)
+**Department:** Artificial Intelligence and Machine Learning
 
 ---
 
+<a id="mentor"></a>
 ## Mentor
 
-**Mr. Anish Antony**
+**Mr. Anish Antony**  
 Assistant Professor II
 
 ---
 
-##  Institution
+<a id="institution"></a>
+## Institution
 
-**KPR Institute of Engineering and Technology**
+**KPR Institute of Engineering and Technology**  
 Avinasi Road, Arasur, Coimbatore – 641407
 
 ---
 
+<a id="acknowledgments"></a>
 ## Acknowledgments
 
 - **NASA Global Precipitation Measurement (GPM) Mission** — for open satellite precipitation datasets.
@@ -231,7 +249,8 @@ Avinasi Road, Arasur, Coimbatore – 641407
 
 ---
 
-##  Future Work
+<a id="future-work"></a>
+## Future Work
 
 - Expanding regional coverage beyond India to additional flood-prone geographies.
 - Improving forecast precision through enhanced model architectures and richer training data.
@@ -240,6 +259,7 @@ Avinasi Road, Arasur, Coimbatore – 641407
 
 ---
 
+<a id="license"></a>
 ## License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
