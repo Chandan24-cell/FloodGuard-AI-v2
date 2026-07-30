@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>FloodGuard AI</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="FloodGuard AI, flood prediction, disaster management, satellite data, geospatial analytics" name="keywords" />
+    <meta content="FloodGuard AI is an AI-powered flood prediction and disaster management platform that leverages machine learning, weather analytics, satellite data, and geospatial intelligence for early warnings and decision support." name="description" />
+    <meta content="Chandan Kumar Sah, Saurav Shah Teli, Sitesh Kumar Paswan" name="author" />
+
+    <!-- Favicons -->
+    <link
+      href="{{ url_for('static', filename='img/favicon-2.png') }}"
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+    />
+    <link
+      href="{{ url_for('static', filename='img/favicon.ico') }}"
+      rel="shortcut icon"
+    />
+    <link
+      href="{{ url_for('static', filename='img/apple-touch-icon.png') }}"
+      rel="apple-touch-icon"
+      sizes="192x192"
+    />
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,500,600,700,700i|Montserrat:300,400,500,600,700"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap CSS File -->
+    <link
+      href="{{ url_for('static', filename='lib/bootstrap/css/bootstrap.min.css') }}"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries CSS Files -->
+    <link
+      href="{{ url_for('static', filename='lib/font-awesome/css/font-awesome.min.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='lib/animate/animate.min.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='lib/ionicons/css/ionicons.min.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='lib/owlcarousel/assets/owl.carousel.min.css') }}"
+      rel="stylesheet"
+    />
+    <link
+      href="{{ url_for('static', filename='lib/lightbox/css/lightbox.min.css') }}"
+      rel="stylesheet"
+    />
+    <!-- Main Stylesheet File -->
+    <link
+      href="{{ url_for('static', filename='css/style.css') }}"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <!--==========================
+  Header
+  ============================-->
+    <header id="header">
+      <div id="topbar">
+        <div class="container">
+          <div class="social-links">
+            <!-- <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+            <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a>
+            <a href="#" class="instagram"><i class="fa fa-instagram"></i></a> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="logo float-left">
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <h1 class="text-light">
+            <a href="#intro" class="scrollto"><span>FloodGuard AI</span></a>
+          </h1> -->
+          <a href="#header" class="scrollto"
+            ><img
+              style="margin-top: -5px;"
+              src="{{ url_for('static', filename='img/logo.png') }}"
+              alt="FloodGuard AI logo"
+              class="img-fluid brand-logo"
+          /></a>
+        </div>
+
+        <nav class="main-nav float-right d-none d-lg-block">
+          <ul>
+            <li class="active"><a href="index.html">Home</a></li>
+            <li><a href="plots.html">Plots</a></li>
+            <li><a href="heatmaps.html">Heatmaps</a></li>
+            <li><a href="satellite.html">Satellite</a></li>
+            <li><a href="predicts.html">Predict</a></li>
+          </ul>
+        </nav>
+        <!-- .main-nav -->
+      </div>
+    </header>
+    <!-- #header -->
+
+    <!--==========================
+    Intro Section
+  ============================-->
+    <section id="intro" class="clearfix">
+      <div class="container d-flex h-100">
+        <div class="row justify-content-center align-self-center">
+          <div class="col-md-5 intro-info order-md-first order-last" style="background-color: transparent;padding-right:50px;">
+            <!-- <h2 style="color:#00BFFF;">FloodGuard AI</h2> -->
+            <a href="#header" class="scrollto"
+            ><img
+              style="margin-top: 0px;"
+              src="{{ url_for('static', filename='img/logo.png') }}"
+              alt="FloodGuard AI logo"
+              class="img-fluid brand-logo"
+          /></a>
+            <h3 style="padding-top:30px;padding-left:10px;line-height: 40px;">FloodGuard AI delivers AI-powered early warnings, risk assessment, and decision support for communities and agencies facing flood threats.</h3>
+            <br />
+            <div style="padding-left:10px;">
+              <a href="#about" class="btn-get-started scrollto">Get Started</a>
+            </div>
+          </div>
+
+          <div class="col-md-7 intro-img order-md-last order-first" style="background-color: transparent;">
+            <!-- <img
+              src="{{ url_for('static', filename='img/er.png') }}"
+              alt=""
+              class="img-fluid"
+            /> -->
+            <iframe
+              width="750"
+              height="500"
+              src="https://www.youtube.com/embed/s-ueO1jIZZk?autoplay=1&mute=1&loop=1&playlist=s-ueO1jIZZk&rel=0"
+              title="FloodGuard AI Video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- #intro -->
+
+    <main id="main">
+      <!--==========================
+      About Us Section
+    ============================-->
+      <section id="about">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-5 col-md-6">
+              <div class="about-img">
+                <img
+                  src="{{ url_for('static', filename='img/images.jpg') }}"
+                  alt=""
+                />
+              </div>
+            </div>
+
+            <div class="col-lg-7 col-md-6">
+              <div class="about-content">
+                <h2>About FloodGuard AI</h2>
+                <h3>
+                  A modern platform for flood forecasting, risk assessment, and disaster preparedness that supports faster, more informed decisions.
+                </h3>
+                <p>
+                  FloodGuard AI combines machine learning, weather analytics, satellite observations, and geospatial intelligence to provide actionable insight into emerging flood risks.
+                </p>
+                <p>
+                  The platform helps governments, disaster management agencies, and local communities anticipate hazardous conditions, prioritize resources, and strengthen resilience before flood events escalate.
+                </p>
+                <p>
+                  By transforming complex environmental data into clear forecasts and visual intelligence, FloodGuard AI supports proactive planning, emergency coordination, and long-term disaster preparedness.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #about -->
+
+      <!--==========================
+      Services Section
+    ============================-->
+      <section id="services" class="section-bg">
+        <div class="container">
+          <header class="section-header">
+            <h3>Services</h3>
+            <p>
+              FloodGuard AI offers an integrated set of tools for forecasting, geospatial analysis, and informed disaster response planning.
+            </p>
+          </header>
+
+          <div class="row">
+            <div
+              class="col-md-6 col-lg-3 wow bounceInUp"
+              data-wow-duration="1.4s"
+            >
+              <div class="box" style="height: 320px;">
+                <div class="icon">
+                  <i
+                    class="ion-ios-analytics-outline"
+                    style="color: #ff689b;"
+                  ></i>
+                </div>
+                <h4 class="title"><a href="plots.html">View Plots</a></h4>
+                <p class="description">
+                  Explore interactive visualizations that combine weather conditions, hydrological signals, and risk indicators to highlight emerging flood threats.
+                </p>
+              </div>
+            </div>
+            <div
+              class="col-md-6 col-lg-3 wow bounceInUp"
+              data-wow-duration="1.4s"
+            >
+              <div class="box" style="height: 320px;">
+                <div class="icon">
+                  <i
+                    class="ion-ios-bookmarks-outline"
+                    style="color: #e98e06;"
+                  ></i>
+                </div>
+                <h4 class="title"><a href="heatmaps.html">View Heatmaps</a></h4>
+                <p class="description">
+                  Review geospatial heatmaps that surface areas of elevated flood probability, rainfall intensity, and potential impact across regions.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="col-md-6 col-lg-3 wow bounceInUp"
+              data-wow-delay="0.1s"
+              data-wow-duration="1.4s"
+            >
+              <div class="box" style="height: 320px;">
+                <div class="icon">
+                  <i
+                    class="ion-ios-speedometer-outline"
+                    style="color: #41cf2e;"
+                  ></i>
+                </div>
+                <h4 class="title"><a href="satellite.html">Satellite Images</a></h4>
+                <p class="description">
+                  Examine satellite-derived precipitation insights and georeferenced imagery to improve situational awareness for flood-prone areas.
+                </p>
+              </div>
+            </div>
+
+            <div
+              class="col-md-6 col-lg-3 wow bounceInUp"
+              data-wow-delay="0.1s"
+              data-wow-duration="1.4s"
+            >
+              <div class="box" style="height: 320px;">
+                <div class="icon">
+                  <i class="ion-ios-paper-outline" style="color: #3fcdc7;"></i>
+                </div>
+                <h4 class="title"><a href="predicts.html">Predict Floods</a></h4>
+                <p class="description">
+                  Assess flood likelihood for selected locations using predictive models informed by real-time environmental data and historical patterns.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #services -->
+
+      <!--==========================
+      Why Us Section
+    ============================-->
+      <section id="why-us" class="wow fadeIn">
+        <div class="container">
+          <div class="row counters">
+            <div class="col-lg-3 col-6 text-center">
+              <span data-toggle="counter-up">25</span>
+              <p>Percent of deaths from natural disasters attributed to floods</p>
+            </div>
+
+            <div class="col-lg-3 col-6 text-center">
+              <span data-toggle="counter-up">2.3</span>
+              <p>Billion people affected by floods in the last 2 decades</p>
+            </div>
+
+            <div class="col-lg-3 col-6 text-center">
+              <span data-toggle="counter-up">40</span>
+              <p>Billion dollars in damages worldwide annually</p>
+            </div>
+
+            <div class="col-lg-3 col-6 text-center">
+              <span data-toggle="counter-up">1</span>
+              <p>Million people were displaced in India in 2019 alone.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--==========================
+      Call To Action Section
+    ============================-->
+      <!-- <section id="call-to-action" class="wow fadeInUp">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-9 text-center text-lg-left">
+              <h3 class="cta-title">Call To Action</h3>
+              <p class="cta-text">
+                Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                cupidatat non proident, sunt in culpa qui officia deserunt
+                mollit anim id est laborum.
+              </p>
+            </div>
+            <div class="col-lg-3 cta-btn-container text-center">
+              <a class="cta-btn align-middle" href="#">Call To Action</a>
+            </div>
+          </div>
+        </div>
+      </section> -->
+      <!-- #call-to-action -->
+
+      <!--==========================
+      Team Section
+    ============================-->
+      <section id="team" class="section-bg">
+        <div class="container">
+          <div class="section-header">
+            <h3>Team</h3>
+            <p>
+              A multidisciplinary team combining artificial intelligence, data science, visualization, and front-end engineering.
+            </p>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-4 col-md-4 wow fadeInUp">
+              <div class="member">
+                <img
+                  src="{{ url_for('static', filename='img/chandan.jpeg') }}"
+                  class="img-fluid"
+                  alt=""
+                  width="500"
+                />
+                <div class="member-info">
+                  <div class="member-info-content">
+                    <h4>Chandan Kumar Sah</h4>
+                    <span>Artificial Intelligence and Machine Learning</span>
+                    <div class="social">
+                      <a
+                        href="https://www.linkedin.com/in/chandan-kumar-sah-40156a360"
+                        ><i class="fa fa-linkedin"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+              <div class="member">
+                <img
+                  src="{{ url_for('static', filename='img/Saurav.jpeg') }}"
+                  class="img-fluid"
+                  alt=""
+                  width="500"
+                />
+                <div class="member-info">
+                  <div class="member-info-content">
+                    <h4>Saurav Shah Teli</h4>
+                    <span>Computer Science and Engineering - Data Visualization </span>
+                    <div class="social">
+                      <a href="https://www.linkedin.com/in/saurav-shah-aa1a64357"
+                        ><i class="fa fa-linkedin"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 wow fadeInUp" data-wow-delay="0.2s">
+              <div class="member">
+                <img
+                  src="{{ url_for('static', filename='img/Sitesh.jpeg') }}"
+                  class="img-fluid"
+                  alt=""
+                  width="500"
+                />
+                <div class="member-info">
+                  <div class="member-info-content">
+                    <h4>Sitesh Kumar Paswan</h4>
+                    <span>Data mining and Front-end Developer</span>
+                    <div class="social">
+                      <a
+                        href="https://www.linkedin.com/in/sitesh-paswan-66a243375"
+                        ><i class="fa fa-linkedin"></i
+                      ></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- #team -->
+
+      <!--==========================
+      Frequently Asked Questions Section
+    ============================-->
+      <section id="faq">
+        <div class="container">
+          <header class="section-header">
+            <h3>Frequently Asked Questions</h3>
+            <p></p>
+          </header>
+
+          <ul id="faq-list" class="wow fadeInUp">
+            <li>
+              <a data-toggle="collapse" class="collapsed" href="#faq1"
+                >Inspiration <i class="ion-android-remove"></i
+              ></a>
+              <div id="faq1" class="collapse" data-parent="#faq-list">
+                <p>
+                  FloodGuard AI was created to close the gap between environmental data and operational readiness. In many regions, communities and agencies need faster access to reliable insight to interpret flood risk and act early. By combining AI, satellite data, weather intelligence, and geospatial analytics, the platform supports more effective preparedness and response.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <a data-toggle="collapse" href="#faq2" class="collapsed"
+                >How we built it <i class="ion-android-remove"></i
+              ></a>
+              <div id="faq2" class="collapse" data-parent="#faq-list">
+                <p>
+                  <b>DATA COLLECTION</b><br><br>
+
+FloodGuard AI combines historical flood records, rainfall observations, river-level measurements, terrain information, and meteorological datasets to create a comprehensive flood prediction database. The collected data is cleaned, standardized, and preprocessed to improve quality before being used for model training.<br><br>
+
+<b>AI & MACHINE LEARNING MODEL</b><br><br>
+
+Our flood prediction engine is built using modern Machine Learning techniques implemented in Python with Scikit-learn. Multiple classification algorithms were evaluated and optimized to identify flood-prone conditions based on environmental and weather parameters. The trained model is integrated into the web application to provide real-time flood risk predictions.<br><br>
+
+<b>DATA VISUALIZATION</b><br><br>
+
+FloodGuard AI presents prediction results through interactive maps, heatmaps, graphs, and statistical dashboards. These visualizations help users, researchers, and disaster management authorities quickly identify high-risk regions and understand rainfall patterns, flood probability, and potential impacts.<br><br>
+
+<b>WEB APPLICATION</b><br><br>
+
+The application is developed using the Flask framework for the backend, HTML5, CSS3, Bootstrap, and JavaScript for the frontend. The platform integrates AI predictions with an intuitive user interface, allowing users to explore flood data, view visualizations, and receive early warning insights through a modern responsive dashboard.<br><br>
+
+<b>OUR GOAL</b><br><br>
+
+FloodGuard AI is designed to support early warning systems, disaster preparedness, and informed decision-making. By combining Artificial Intelligence with geospatial visualization, the platform helps communities and authorities better prepare for flood events, reduce risks, and improve emergency response planning.
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <a data-toggle="collapse" href="#faq3" class="collapsed"
+                >Accomplishments we are proud of<i
+                  class="ion-android-remove"
+                ></i
+              ></a>
+              <div id="faq3" class="collapse" data-parent="#faq-list">
+                <p>
+                - Building a comprehensive flood intelligence workflow that connects data, prediction, and visual insight.<br>
+                - Creating a platform that supports early warning, situational awareness, and disaster preparedness.<br>
+                - Delivering a polished web experience for exploring forecasts, risk indicators, and geospatial information.<br>
+                - Turning complex environmental data into clear, actionable intelligence for decision makers.<br>
+                </p>
+              </div>
+            </li>
+
+            <li>
+              <a data-toggle="collapse" href="#faq4" class="collapsed"
+                >What is next for FloodGuard AI<i class="ion-android-remove"></i
+              ></a>
+              <div id="faq4" class="collapse" data-parent="#faq-list">
+                <p>
+                - Expanding coverage to additional regions and climate contexts with broader geospatial data integration.<br>
+                - Enhancing predictive accuracy through improved real-time forecasting and remote sensing inputs.<br>
+                - Strengthening operational tools for emergency response, community outreach, and resilience planning.<br>
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+      <!-- #faq -->
+    </main>
+
+    <!--==========================
+    Footer
+  ============================-->
+    <footer id="footer" class="section-bg">
+      <div class="footer-top">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="row">
+                <div class="col-sm-11">
+                  <div class="footer-info">
+                    <!-- <h3>FloodGuard AI</h3> -->
+                    <a href="index.html" class="scrollto"
+                      ><img
+                        style="margin-top: 0px;"
+                        src="{{ url_for('static', filename='img/logo.png') }}"
+                        alt="FloodGuard AI logo"
+                        class="img-fluid brand-logo"
+                    /></a>
+                    <p style="padding-top:20px;">
+                      FloodGuard AI is an AI-powered flood prediction and disaster management platform that combines machine learning, weather analytics, satellite data, and geospatial intelligence to support early warnings, risk assessment, and decision support.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="form">
+                <h4>Send us a message</h4>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button"
+                                class="close"
+                                data-dismiss="alert">
+                          <span>&times;</span>
+                        </button>
+                      </div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <form action="{{ url_for('contact') }}" method="POST">
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control"
+                      id="name"
+                      placeholder="Your Name"
+                      data-rule="minlen:4"
+                      data-msg="Please enter at least 4 chars"
+                    />
+                    <div class="validation"></div>
+                  </div>
+                  <div class="form-group">
+                    <input
+                      type="email"
+                      class="form-control"
+                      name="email"
+                      id="email"
+                      placeholder="Your Email"
+                      data-rule="email"
+                      data-msg="Please enter a valid email"
+                    />
+                    <div class="validation"></div>
+                  </div>
+                  <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="subject"
+                      id="subject"
+                      placeholder="Subject"
+                      data-rule="minlen:4"
+                      data-msg="Please enter at least 8 chars of subject"
+                    />
+                    <div class="validation"></div>
+                  </div>
+                  <div class="form-group">
+                    <textarea
+                      class="form-control"
+                      name="message"
+                      rows="6"
+                      placeholder="Your Message"
+                      required></textarea>
+                  </div>
+
+                  <div class="text-center">
+                    <button type="submit" title="Send Message">
+                      Send Message
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- #footer -->
+
+    <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+    <!-- Uncomment below i you want to use a preloader -->
+    <!-- <div id="preloader"></div> -->
+
+    <!-- JavaScript Libraries -->
+    <script src="{{ url_for('static', filename='lib/jquery/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/jquery/jquery-migrate.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/easing/easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/mobile-nav/mobile-nav.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/wow/wow.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/waypoints/waypoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/counterup/counterup.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/owlcarousel/owl.carousel.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/isotope/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='lib/lightbox/js/lightbox.min.js') }}"></script>
+    <!-- Contact Form JavaScript File -->
+    <script src="{{ url_for('static', filename='contactform/contactform.js') }}"></script>
+
+    <!-- Template Main Javascript File -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

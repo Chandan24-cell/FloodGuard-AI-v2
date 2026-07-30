@@ -1,0 +1,64 @@
+<svg width="1400" height="420" viewBox="0 0 1400 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="shieldGrad" x1="256" y1="50" x2="256" y2="456" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#123A6B"/>
+      <stop offset="1" stop-color="#081B36"/>
+    </linearGradient>
+    <linearGradient id="waveGrad" x1="140" y1="300" x2="384" y2="360" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00C2D9"/>
+      <stop offset="1" stop-color="#10B981"/>
+    </linearGradient>
+    <radialGradient id="coreGrad" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#4CE8C4"/>
+      <stop offset="1" stop-color="#0FB981"/>
+    </radialGradient>
+
+    <path id="shieldPath" d="M256,54
+      C204,54 156,76 116,101
+      L116,244
+      C116,337 172,411 256,453
+      C340,411 396,337 396,244
+      L396,101
+      C356,76 308,54 256,54 Z"/>
+
+    <mask id="detailMask" maskUnits="userSpaceOnUse">
+      <use href="#shieldPath" fill="#ffffff"/>
+      <g fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="256" cy="152" r="34" stroke-width="9"/>
+        <circle cx="256" cy="152" r="60" stroke-width="8"/>
+        <circle cx="256" cy="152" r="86" stroke-width="7"/>
+        <path d="M132,332 C176,300 218,364 256,332 C294,300 336,364 380,332" stroke-width="15"/>
+        <path d="M256,163 L190,238 M256,163 L322,238 M190,238 L132,325 M322,238 L380,325" stroke-width="4.5"/>
+      </g>
+      <g fill="#000000">
+        <circle cx="256" cy="152" r="11"/>
+        <circle cx="132" cy="332" r="7"/>
+        <circle cx="380" cy="332" r="7"/>
+        <circle cx="190" cy="238" r="6"/>
+        <circle cx="322" cy="238" r="6"/>
+      </g>
+    </mask>
+  </defs>
+
+  <g transform="translate(20,-18)">
+    <g>
+      <circle cx="256" cy="152" r="34" fill="none" stroke="#3FD6EC" stroke-width="9" stroke-linecap="round" opacity="0.95"/>
+      <circle cx="256" cy="152" r="60" fill="none" stroke="#22C6DE" stroke-width="8" stroke-linecap="round" opacity="0.75"/>
+      <circle cx="256" cy="152" r="86" fill="none" stroke="#12ABC4" stroke-width="7" stroke-linecap="round" opacity="0.55"/>
+      <path d="M132,332 C176,300 218,364 256,332 C294,300 336,364 380,332"
+            fill="none" stroke="url(#waveGrad)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M256,163 L190,238 M256,163 L322,238 M190,238 L132,325 M322,238 L380,325"
+            fill="none" stroke="#7FEFE0" stroke-width="4.5" stroke-linecap="round" opacity="0.85"/>
+      <circle cx="256" cy="152" r="11" fill="url(#coreGrad)"/>
+      <circle cx="132" cy="332" r="7" fill="#10B981"/>
+      <circle cx="380" cy="332" r="7" fill="#10B981"/>
+      <circle cx="190" cy="238" r="6" fill="#3FD6EC"/>
+      <circle cx="322" cy="238" r="6" fill="#3FD6EC"/>
+    </g>
+    <use href="#shieldPath" fill="url(#shieldGrad)" mask="url(#detailMask)"/>
+    <use href="#shieldPath" fill="none" stroke="#5FE3F0" stroke-width="2.5" opacity="0.55"/>
+  </g>
+
+  <text x="470" y="215" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="98" letter-spacing="-1" fill="#0B1E3D">Flood<tspan fill="#0FB981">Guard</tspan><tspan fill="#12ABC4" font-weight="700"> AI</tspan></text>
+  <text x="474" y="270" font-family="Arial, Helvetica, sans-serif" font-weight="500" font-size="34" letter-spacing="8" fill="#5B7690">EARLY-WARNING INTELLIGENCE</text>
+</svg>
