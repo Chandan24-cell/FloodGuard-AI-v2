@@ -1,0 +1,54 @@
+.react-map-shell {
+  position: relative;
+  width: 100%;
+  min-height: 540px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #d7e4f2;
+  background: linear-gradient(135deg, #f5fbff 0%, #eef5ff 100%);
+  box-shadow: 0 16px 42px rgba(5, 22, 41, 0.12);
+}
+
+.react-map-title {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(8, 23, 40, 0.86);
+  color: #f8fbff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.react-map-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.react-map-pill {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #16324f;
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(5, 24, 41, 0.14);
+}
+
+.react-map-stage {
+  width: 100%;
+  height: 540px;
+}
+
+.react-map-stage .maplibregl-map {
+  width: 100%;
+  height: 100%;
+}

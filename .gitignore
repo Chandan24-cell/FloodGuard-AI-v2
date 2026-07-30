@@ -4,7 +4,7 @@ venv/
 
 # Node modules
 node_modules/
-
+dist/
 # Python cache
 __pycache__/
 *.pyc

@@ -1,103 +1,153 @@
-import React, {useEffect, useRef, useState} from 'react'
-import mapboxgl from 'mapbox-gl'
+import React, { useEffect, useRef } from "react";
+import * as maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { floodGeojson, rainfallStations, riverStations } from "../data/mockData";
 
-mapboxgl.accessToken = import.meta.env.REACT_APP_MAPBOX_TOKEN || ''
+export default function MapContainer() {
+  const mapContainer = useRef(null);
+  const map = useRef(null);
 
-export default function MapContainer({initialTimestamp}){
-  const containerRef = useRef(null)
-  const mapRef = useRef(null)
-  const [mapReady, setMapReady] = useState(false)
+  useEffect(() => {
+    if (map.current) return;
 
-  useEffect(()=>{
-    if(!containerRef.current) return
-
-    const map = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
-      center: [78.9629,20.5937],
-      zoom: 4,
-      pitch: 45,
-      bearing: -10,
-      antialias: true
-    })
-
-    map.on('load', ()=>{
-      // DEM terrain (Mapbox provided) — requires token with terrain tiles
-      try{
-        map.addSource('mapbox-dem', {
-          'type': 'raster-dem',
-          'url': 'mapbox://mapbox.terrain-rgb',
-          'tileSize': 512
-        })
-        map.setTerrain({source:'mapbox-dem',exaggeration:1.0})
-
-        map.addLayer({
-          'id':'sky',
-          'type':'sky',
-          'paint':{
-            'sky-type':'atmosphere',
-            'sky-atmosphere-sun-intensity':10
+    map.current = new maplibregl.Map({
+      container: mapContainer.current,
+      style: {
+        version: 8,
+        sources: {
+          osm: {
+            type: "raster",
+            tiles: [
+              "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            ],
+            tileSize: 256
           }
-        })
-      }catch(e){
-        // if terrain source or token not available, ignore
-        console.warn('Terrain not applied', e)
-      }
+        },
+        layers: [{ id: "osm", type: "raster", source: "osm" }]
+      },
+      center: [78.9629, 20.5937],
+      zoom: 4,
+      attributionControl: false
+    });
 
-      // Placeholder vector source - replace with your vector tile endpoint or GeoJSON
-      // Example: Mapbox tileset: 'mapbox://yourusername.yourtileset'
-      map.addSource('flood-polygons', {
-        type: 'geojson',
-        data: {
-          "type":"FeatureCollection",
-          "features":[]
-        }
-      })
+    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
+    map.current.addControl(new maplibregl.FullscreenControl());
+    map.current.addControl(new maplibregl.ScaleControl({ unit: "metric" }));
+    map.current.addControl(new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      trackUserLocation: true
+    }));
 
-      map.addLayer({
-        id: 'flood-extrusion',
-        type: 'fill-extrusion',
-        source: 'flood-polygons',
+    map.current.on("load", () => {
+      map.current.addSource("flood-polygons", { type: "geojson", data: floodGeojson });
+      map.current.addLayer({
+        id: "flood-risk",
+        type: "fill",
+        source: "flood-polygons",
         paint: {
-          'fill-extrusion-color': ['interpolate',['linear'],['get','predicted_depth_m'],0,'#00ffff',1,'#0077ff',2,'#ff7f00',5,'#ff0000'],
-          'fill-extrusion-height': ['*',['get','predicted_depth_m'],1.0],
-          'fill-extrusion-opacity': 0.7
+          "fill-color": [
+            "case",
+            ["==", ["get", "severity"], "red"], "#ef4444",
+            ["==", ["get", "severity"], "orange"], "#fb923c",
+            ["==", ["get", "severity"], "yellow"], "#fbbf24",
+            "#2dd4bf"
+          ],
+          "fill-opacity": 0.42
         }
-      })
+      });
 
-      // Simple popup on hover
-      const popup = new mapboxgl.Popup({closeButton:false,closeOnClick:false})
-      map.on('mousemove','flood-extrusion',(e)=>{
-        if(!e.features || !e.features.length) return
-        const feat = e.features[0]
-        const depth = feat.properties?.predicted_depth_m ?? '—'
-        const pop = feat.properties?.affected_population ?? '—'
-        popup.setLngLat(e.lngLat).setHTML(`<b>Depth:</b> ${depth} m<br/><b>Affected:</b> ${pop}`).addTo(map)
-      })
-      map.on('mouseleave','flood-extrusion',()=>popup.remove())
+      map.current.addLayer({
+        id: "flood-outline",
+        type: "line",
+        source: "flood-polygons",
+        paint: {
+          "line-color": "#ffffff",
+          "line-width": 1.2,
+          "line-opacity": 0.8
+        }
+      });
 
-      mapRef.current = map
-      setMapReady(true)
-    })
+      map.current.addSource("rainfall-points", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: rainfallStations.map((station) => ({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: [station.lng, station.lat] },
+            properties: { name: station.name, rainfall: station.rainfall }
+          }))
+        }
+      });
 
-    return ()=> map.remove()
-  },[])
+      map.current.addLayer({
+        id: "rainfall-points",
+        type: "circle",
+        source: "rainfall-points",
+        paint: {
+          "circle-radius": 8,
+          "circle-color": "#3b82f6",
+          "circle-opacity": 0.7
+        }
+      });
 
-  // Example: update query/filter based on timestamp — depends on how your source encodes time
-  useEffect(()=>{
-    if(!mapRef.current) return
-    const map = mapRef.current
-    try{
-      map.setFilter('flood-extrusion',['==',['get','timestamp'], initialTimestamp])
-    }catch(e){
-      // setFilter may fail if feature property not present — it's okay for prototype
-    }
-  },[initialTimestamp])
+      map.current.addSource("river-points", {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: riverStations.map((station) => ({
+            type: "Feature",
+            geometry: { type: "Point", coordinates: [station.lng, station.lat] },
+            properties: { name: station.name, level: station.level }
+          }))
+        }
+      });
+
+      map.current.addLayer({
+        id: "river-points",
+        type: "circle",
+        source: "river-points",
+        paint: {
+          "circle-radius": 7,
+          "circle-color": "#2dd4bf",
+          "circle-opacity": 0.85
+        }
+      });
+
+      map.current.on("click", "flood-risk", (event) => {
+        const feature = event.features?.[0];
+        if (!feature) return;
+        const popup = new maplibregl.Popup({ closeOnClick: true }).setLngLat(event.lngLat).setHTML(`
+          <div><strong>${feature.properties.location}</strong></div>
+          <div>Depth: ${feature.properties.depth} m</div>
+          <div>Population: ${feature.properties.population.toLocaleString()}</div>
+          <div>Rainfall: ${feature.properties.rainfall} mm</div>
+          <div>Confidence: ${(feature.properties.confidence * 100).toFixed(0)}%</div>
+          <div>Risk: ${feature.properties.riskLevel}</div>
+        `);
+        popup.addTo(map.current);
+      });
+
+      map.current.on("mousemove", "flood-risk", (event) => {
+        map.current.getCanvas().style.cursor = event.features?.length ? "pointer" : "";
+      });
+      map.current.on("mouseleave", "flood-risk", () => {
+        map.current.getCanvas().style.cursor = "";
+      });
+    });
+
+    return () => map.current?.remove();
+  }, []);
 
   return (
-    <div className="map-root">
-      <div className="map-container" ref={containerRef} style={{height:'100vh'}} />
-      <div className="info-card">Premium 3D Map Prototype — Mapbox GL JS</div>
+    <div className="react-map-shell">
+      <div className="react-map-title">Interactive Flood Intelligence Map</div>
+      <div className="react-map-overlay">
+        <div className="react-map-pill">OpenStreetMap</div>
+        <div className="react-map-pill">Live Layers</div>
+      </div>
+      <div ref={mapContainer} className="react-map-stage" />
     </div>
-  )
+  );
 }
