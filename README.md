@@ -197,6 +197,19 @@ floodguard-ai/
 ---
 
 <a id="screenshots"></a>
+## Frontend prototype (interactive Mapbox)
+
+A minimal React + Vite prototype is available under [static/frontend](/Users/chandankumarsah/Downloads/FloodML-master.worktrees/premium-3d-ui-ux-enhancements/static/frontend). It contains a Mapbox GL JS-based MapContainer and TimeSlider components to prototype the "premium 3D" experience.
+
+Quick notes:
+- Copy static/frontend/.env.example to static/frontend/.env and set REACT_APP_MAPBOX_TOKEN with a Mapbox token.
+- Install and run the prototype:
+  cd static/frontend
+  npm install
+  npm run dev
+
+Then open the Vite dev URL (usually http://localhost:5173).
+
 ## Screenshots
 
 The project includes a set of representative screenshots that showcase the platform's main interfaces and data visualizations.

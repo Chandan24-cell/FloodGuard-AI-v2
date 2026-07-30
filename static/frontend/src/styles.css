@@ -1,0 +1,5 @@
+html,body,#root{height:100%;margin:0}
+.app-root{height:100vh;position:relative;font-family:Inter,Arial,Helvetica,sans-serif;background:#0b0f14;color:#e6eef8}
+.controls{position:absolute;left:16px;bottom:20px;z-index:10}
+.map-container{position:absolute;inset:0}
+.info-card{position:absolute;top:16px;left:16px;background:rgba(255,255,255,0.04);backdrop-filter:blur(6px);padding:12px;border-radius:8px;color:#e6eef8;box-shadow:0 8px 24px rgba(2,6,23,0.6)}
