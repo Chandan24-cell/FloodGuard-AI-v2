@@ -13,23 +13,43 @@ import requests
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "floodml-secret"
+# Prefer a secret key from environment for production; fallback for dev
+app.secret_key = os.getenv("SECRET_KEY", "floodml-secret")
 
-app.config["MAIL_SERVER"] = os.getenv("MAIL_SERVER")
-app.config["MAIL_PORT"] = int(os.getenv("MAIL_PORT"))
-app.config["MAIL_USE_TLS"] = True
-app.config["MAIL_USERNAME"] = os.getenv("MAIL_USERNAME")
-app.config["MAIL_PASSWORD"] = os.getenv("MAIL_PASSWORD")
-app.config["MAIL_DEFAULT_SENDER"] = os.getenv("MAIL_DEFAULT_SENDER")
+# Configure mail only if variables are present; avoid crashing when .env is incomplete
+mail_server = os.getenv("MAIL_SERVER")
+mail_port = os.getenv("MAIL_PORT")
+mail_username = os.getenv("MAIL_USERNAME")
+mail_password = os.getenv("MAIL_PASSWORD")
+mail_default_sender = os.getenv("MAIL_DEFAULT_SENDER")
 
-mail = Mail(app)
+if mail_server and mail_username:
+    app.config["MAIL_SERVER"] = mail_server
+    try:
+        app.config["MAIL_PORT"] = int(mail_port) if mail_port else 587
+    except ValueError:
+        app.config["MAIL_PORT"] = 587
+    app.config["MAIL_USE_TLS"] = True
+    app.config["MAIL_USERNAME"] = mail_username
+    app.config["MAIL_PASSWORD"] = mail_password
+    app.config["MAIL_DEFAULT_SENDER"] = mail_default_sender or mail_username
+    mail = Mail(app)
+else:
+    # Create a dummy Mail object with minimal interface to avoid exceptions in contact() when mail is not configured
+    class DummyMail:
+        def send(self, *args, **kwargs):
+            print("MAIL: send called but mail is not configured. Skipping send.")
+
+    mail = DummyMail()
 
 data = [{'name':'Delhi', "sel": "selected"}, {'name':'Mumbai', "sel": ""}, {'name':'Kolkata', "sel": ""}, {'name':'Bangalore', "sel": ""}, {'name':'Chennai', "sel": ""}]
 # data = [{'name':'India', "sel": ""}]
 months = [{"name":"May", "sel": ""}, {"name":"June", "sel": ""}, {"name":"July", "sel": "selected"}]
 cities = [{'name':'Delhi', "sel": "selected"}, {'name':'Mumbai', "sel": ""}, {'name':'Kolkata', "sel": ""}, {'name':'Bangalore', "sel": ""}, {'name':'Chennai', "sel": ""}, {'name':'New York', "sel": ""}, {'name':'Los Angeles', "sel": ""}, {'name':'London', "sel": ""}, {'name':'Paris', "sel": ""}, {'name':'Sydney', "sel": ""}, {'name':'Beijing', "sel": ""}]
 
+# Load ML model
 model = pickle.load(open("model.pickle", 'rb'))
+
 
 @app.route("/")
 @app.route('/index.html')
@@ -88,7 +108,10 @@ def get_predicts():
             if item['name'] == cityname:
                 item['sel'] = 'selected'
         print(cityname)
-        API_KEY = "9b4c5dabe1083792c69fd24843842a8a"
+        API_KEY = os.getenv("OPENWEATHER_API_KEY", "").strip()
+
+        if not API_KEY:
+            raise Exception("OPENWEATHER_API_KEY is not configured")
 
         geo_url = "http://api.openweathermap.org/geo/1.0/direct"
 
@@ -98,8 +121,12 @@ def get_predicts():
             "appid": API_KEY
         }
 
-        response = requests.get(geo_url, params=params)
-        data = response.json()
+        response = requests.get(geo_url, params=params, timeout=10)
+        response.raise_for_status()
+        try:
+            data = response.json()
+        except ValueError:
+            raise Exception("Weather service returned an invalid response")
 
         if not data:
             raise Exception("City not found")
@@ -109,11 +136,15 @@ def get_predicts():
         final = prediction.get_data(latitude, longitude)
 
         final[4] *= 15
+        # Ensure model is loaded and compatible
+        if model is None:
+            raise Exception("Model not loaded. Retrain using training/train.py with current scikit-learn or place a compatible model.pickle in the project root.")
+
         if str(model.predict([final])[0]) == "0":
             pred = "Safe"
         else:
             pred = "Unsafe"
-        
+
         return render_template('predicts.html', cityname="Information about " + cityname, cities=cities, temp=round(final[0], 2), maxt=round(final[1], 2), wspd=round(final[2], 2), cloudcover=round(final[3], 2), percip=round(final[4], 2), humidity=round(final[5], 2), pred = pred)
     except Exception as e:
         import traceback
@@ -166,4 +197,17 @@ Message:
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Prefer PORT environment variable, default 5000
+    port = int(os.getenv("PORT", 5000))
+    host = os.getenv("HOST", "127.0.0.1")
+    try:
+        app.run(debug=True, host=host, port=port)
+    except OSError as e:
+        # Common cause: port already in use by macOS system service (Control Center / AirPlay)
+        print(f"ERROR: Could not bind to {host}:{port}: {e}")
+        if port == 5000:
+            fallback = 5001
+            print(f"Attempting to start on fallback port {fallback} instead.")
+            app.run(debug=True, host=host, port=fallback)
+        else:
+            raise

@@ -63,10 +63,6 @@
       href="{{ url_for('static', filename='css/style.css') }}"
       rel="stylesheet"
     />
-    <link
-      href="{{ url_for('static', filename='frontend/dist/assets/index-fdfcb590.css') }}"
-      rel="stylesheet"
-    />
   </head>
 
   <body>
@@ -156,16 +152,6 @@
       </div>
     </section>
     <!-- #intro -->
-
-    <section id="interactive-map" class="section-bg" style="padding: 60px 0 40px;">
-      <div class="container">
-        <header class="section-header">
-          <h3>Live Flood Intelligence Map</h3>
-          <p>Explore an interactive geospatial view of flood risk, rainfall stations, and river monitoring layers on the same FloodGuard AI experience.</p>
-        </header>
-        <div id="react-map" style="min-height: 560px; margin-top: 24px;"></div>
-      </div>
-    </section>
 
     <main id="main">
       <!--==========================
@@ -626,7 +612,6 @@ FloodGuard AI is designed to support early warning systems, disaster preparednes
 
     <!-- JavaScript Libraries -->
     <script src="{{ url_for('static', filename='lib/jquery/jquery.min.js') }}"></script>
-    <script type="module" src="{{ url_for('static', filename='frontend/dist/assets/index-52298619.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/jquery/jquery-migrate.min.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='lib/easing/easing.min.js') }}"></script>

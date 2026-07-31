@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles/reactMap.css";
 
-const mountNode = document.getElementById("react-map");
+const mountNode = document.getElementById("react-map") || document.getElementById("root");
 
 if (mountNode) {
   const root = createRoot(mountNode);

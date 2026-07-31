@@ -1,16 +1,24 @@
-import requests
+import os
 
-API_KEY = "f04e66a443e3e6d40a8951a6644e627d"
+import requests
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def get_data(lat, lon):
+    api_key = os.getenv("OPENWEATHER_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("OPENWEATHER_API_KEY is not configured")
 
     url = (
         f"https://api.openweathermap.org/data/2.5/forecast"
-        f"?lat={lat}&lon={lon}&appid={API_KEY}&units=imperial"
+        f"?lat={lat}&lon={lon}&appid={api_key}&units=imperial"
     )
 
-    data = requests.get(url).json()
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+    data = response.json()
 
     final = [0, 0, 0, 0, 0, 0]
 

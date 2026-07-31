@@ -1,144 +1,101 @@
-import React, { useEffect, useRef } from "react";
-import * as maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
-import { floodGeojson, rainfallStations, riverStations } from "../data/mockData";
+import React, { useRef } from "react";
+import {
+  MapContainer as LeafletMapContainer,
+  TileLayer,
+  Popup,
+  GeoJSON,
+  CircleMarker,
+} from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import {
+  floodGeojson,
+  rainfallStations,
+  riverStations,
+} from "../data/mockData";
+
+// --- Leaflet Icon Fix ---
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.merge({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+// --- End Icon Fix ---
 
 export default function MapContainer() {
-  const mapContainer = useRef(null);
-  const map = useRef(null);
+  const mapRef = useRef();
 
-  useEffect(() => {
-    if (map.current) return;
+  // Default center and zoom
+  const defaultCenter = [20.5937, 78.9629];
+  const defaultZoom = 4;
 
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: {
-        version: 8,
-        sources: {
-          osm: {
-            type: "raster",
-            tiles: [
-              "https://a.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              "https://b.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              "https://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            ],
-            tileSize: 256
-          }
-        },
-        layers: [{ id: "osm", type: "raster", source: "osm" }]
-      },
-      center: [78.9629, 20.5937],
-      zoom: 4,
-      attributionControl: false
-    });
+// --- Popup Content Builders ---
+  const createFloodPopupContent = (feature) => {
+    if (!feature.properties) return "No data";
+    const { location, depth, population, rainfall, confidence, riskLevel } =
+      feature.properties;
+    return `
+      <div><strong>${location || "N/A"}</strong></div>
+      <div>Depth: ${depth !== undefined ? depth + " m" : "N/A"}</div>
+      <div>Population: ${population ? population.toLocaleString() : "N/A"}</div>
+      <div>Rainfall: ${rainfall !== undefined ? rainfall + " mm" : "N/A"}</div>
+      <div>Confidence: ${(confidence * 100).toFixed(0)}%</div>
+      <div>Risk: ${riskLevel || "N/A"}</div>
+    `;
+  };
 
-    map.current.addControl(new maplibregl.NavigationControl(), "top-right");
-    map.current.addControl(new maplibregl.FullscreenControl());
-    map.current.addControl(new maplibregl.ScaleControl({ unit: "metric" }));
-    map.current.addControl(new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      trackUserLocation: true
-    }));
+  const createRainfallPopupContent = (station) => {
+    return `
+      <div><strong>${station.name}</strong></div>
+      <div>Rainfall: ${
+        station.rainfall !== undefined ? station.rainfall + " mm" : "N/A"
+      }</div>
+    `;
+  };
 
-    map.current.on("load", () => {
-      map.current.addSource("flood-polygons", { type: "geojson", data: floodGeojson });
-      map.current.addLayer({
-        id: "flood-risk",
-        type: "fill",
-        source: "flood-polygons",
-        paint: {
-          "fill-color": [
-            "case",
-            ["==", ["get", "severity"], "red"], "#ef4444",
-            ["==", ["get", "severity"], "orange"], "#fb923c",
-            ["==", ["get", "severity"], "yellow"], "#fbbf24",
-            "#2dd4bf"
-          ],
-          "fill-opacity": 0.42
-        }
-      });
+  const createRiverPopupContent = (station) => {
+    return `
+      <div><strong>${station.name}</strong></div>
+      <div>Level: ${
+        station.level !== undefined ? station.level : "N/A"
+      }</div>
+    `;
+  };
 
-      map.current.addLayer({
-        id: "flood-outline",
-        type: "line",
-        source: "flood-polygons",
-        paint: {
-          "line-color": "#ffffff",
-          "line-width": 1.2,
-          "line-opacity": 0.8
-        }
-      });
+  // --- Layer Style Configurations ---
+  const floodFillStyle = (feature) => ({
+    fillColor:
+      feature.properties.severity === "red"
+        ? "#ef4444"
+        : feature.properties.severity === "orange"
+        ? "#fb923c"
+        : feature.properties.severity === "yellow"
+        ? "#fbbf24"
+        : "#2dd4bf",
+    fillOpacity: 0.42,
+    color: "#ffffff",
+    weight: 1.2,
+    opacity: 0.8,
+  });
 
-      map.current.addSource("rainfall-points", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: rainfallStations.map((station) => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [station.lng, station.lat] },
-            properties: { name: station.name, rainfall: station.rainfall }
-          }))
-        }
-      });
+  const rainfallCircleStyle = {
+    radius: 8,
+    fillColor: "#3b82f6",
+    fillOpacity: 0.7,
+    color: "white",
+    weight: 1,
+  };
 
-      map.current.addLayer({
-        id: "rainfall-points",
-        type: "circle",
-        source: "rainfall-points",
-        paint: {
-          "circle-radius": 8,
-          "circle-color": "#3b82f6",
-          "circle-opacity": 0.7
-        }
-      });
-
-      map.current.addSource("river-points", {
-        type: "geojson",
-        data: {
-          type: "FeatureCollection",
-          features: riverStations.map((station) => ({
-            type: "Feature",
-            geometry: { type: "Point", coordinates: [station.lng, station.lat] },
-            properties: { name: station.name, level: station.level }
-          }))
-        }
-      });
-
-      map.current.addLayer({
-        id: "river-points",
-        type: "circle",
-        source: "river-points",
-        paint: {
-          "circle-radius": 7,
-          "circle-color": "#2dd4bf",
-          "circle-opacity": 0.85
-        }
-      });
-
-      map.current.on("click", "flood-risk", (event) => {
-        const feature = event.features?.[0];
-        if (!feature) return;
-        const popup = new maplibregl.Popup({ closeOnClick: true }).setLngLat(event.lngLat).setHTML(`
-          <div><strong>${feature.properties.location}</strong></div>
-          <div>Depth: ${feature.properties.depth} m</div>
-          <div>Population: ${feature.properties.population.toLocaleString()}</div>
-          <div>Rainfall: ${feature.properties.rainfall} mm</div>
-          <div>Confidence: ${(feature.properties.confidence * 100).toFixed(0)}%</div>
-          <div>Risk: ${feature.properties.riskLevel}</div>
-        `);
-        popup.addTo(map.current);
-      });
-
-      map.current.on("mousemove", "flood-risk", (event) => {
-        map.current.getCanvas().style.cursor = event.features?.length ? "pointer" : "";
-      });
-      map.current.on("mouseleave", "flood-risk", () => {
-        map.current.getCanvas().style.cursor = "";
-      });
-    });
-
-    return () => map.current?.remove();
-  }, []);
+  const riverCircleStyle = {
+    radius: 7,
+    fillColor: "#2dd4bf",
+    fillOpacity: 0.85,
+    color: "white",
+    weight: 1,
+  };
 
   return (
     <div className="react-map-shell">
@@ -147,7 +104,57 @@ export default function MapContainer() {
         <div className="react-map-pill">OpenStreetMap</div>
         <div className="react-map-pill">Live Layers</div>
       </div>
-      <div ref={mapContainer} className="react-map-stage" />
+      <LeafletMapContainer
+        ref={mapRef}
+        center={defaultCenter}
+        zoom={defaultZoom}
+        style={{ height: "100%", width: "100%" }}
+        attributionControl={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+
+        {/* Flood GeoJSON Layer */}
+        <GeoJSON
+          data={floodGeojson}
+          style={floodFillStyle}
+          onEachFeature={(feature, layer) => {
+            if (
+              feature.properties &&
+              (feature.properties.location ||
+                feature.properties.depth !== undefined)
+            ) {
+              layer.bindPopup(createFloodPopupContent(feature));
+            }
+          }}
+        />
+
+{/* Rainfall Stations Markers */}
+        {rainfallStations.map((station, idx) => (
+          <CircleMarker
+            key={`rainfall-${idx}`}
+            center={[station.lat, station.lng]}
+            pathOptions={rainfallCircleStyle}
+            radius={8}
+          >
+            <Popup>{createRainfallPopupContent(station)}</Popup>
+          </CircleMarker>
+        ))}
+
+        {/* River Stations Markers */}
+        {riverStations.map((station, idx) => (
+          <CircleMarker
+            key={`river-${idx}`}
+            center={[station.lat, station.lng]}
+            pathOptions={riverCircleStyle}
+            radius={7}
+          >
+            <Popup>{createRiverPopupContent(station)}</Popup>
+          </CircleMarker>
+        ))}
+      </LeafletMapContainer>
     </div>
   );
 }
