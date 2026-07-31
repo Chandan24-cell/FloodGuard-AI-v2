@@ -1,24 +1,17 @@
-# Python virtual environments
-.venv/
+# Python
 venv/
-
-# Node modules
-node_modules/
-dist/
-
-# Python cache
+.venv/
 __pycache__/
 *.pyc
-*.pyo
 
-# Environment files
+# Environment
 .env
-.env.local
+.env.*
+!.env.example
 
-# Logs and caches
-*.log
-.pytest_cache/
+# Node
+node_modules/
 
 # macOS
 .DS_Store
-static/frontend/node_modules/
+static/frontend/dist/
