@@ -1,20 +1,22 @@
 """Web app."""
-import flask
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_mail import Mail, Message
-from dotenv import load_dotenv
-import os
-
-import pickle
 import base64
-from training import prediction
-import requests
+import flask
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask_mail import Mail, Message
+import os
+import pickle
 
-load_dotenv()
+from config import load_environment
+
+
+LOADED_DOTENV_PATH = load_environment()
+from training import prediction
 
 app = Flask(__name__)
 # Prefer a secret key from environment for production; fallback for dev
 app.secret_key = os.getenv("SECRET_KEY", "floodml-secret")
+app.config["LOADED_DOTENV_PATH"] = str(LOADED_DOTENV_PATH) if LOADED_DOTENV_PATH else None
+app.config["OPENWEATHER_API_KEY"] = os.getenv("OPENWEATHER_API_KEY")
 
 # Configure mail only if variables are present; avoid crashing when .env is incomplete
 mail_server = os.getenv("MAIL_SERVER")
@@ -99,61 +101,88 @@ def satelliteimages():
 def predicts():
     return render_template('predicts.html', cities=cities, cityname="Information about the city")
 
+
 @app.route('/predicts.html', methods=["GET", "POST"])
 def get_predicts():
+    cities = [{'name': 'Delhi', "sel": ""}, {'name': 'Mumbai', "sel": ""}, {'name': 'Kolkata', "sel": ""}, {'name': 'Bangalore', "sel": ""}, {'name': 'Chennai', "sel": ""}, {'name': 'New York', "sel": ""}, {'name': 'Los Angeles', "sel": ""}, {'name': 'London', "sel": ""}, {'name': 'Paris', "sel": ""}, {'name': 'Sydney', "sel": ""}, {'name': 'Beijing', "sel": ""}]
+    weather_error = None
+
     try:
-        cityname = request.form["city"]
-        cities = [{'name':'Delhi', "sel": ""}, {'name':'Mumbai', "sel": ""}, {'name':'Kolkata', "sel": ""}, {'name':'Bangalore', "sel": ""}, {'name':'Chennai', "sel": ""}, {'name':'New York', "sel": ""}, {'name':'Los Angeles', "sel": ""}, {'name':'London', "sel": ""}, {'name':'Paris', "sel": ""}, {'name':'Sydney', "sel": ""}, {'name':'Beijing', "sel": ""}]
+        cityname = request.form.get("city", "").strip() or request.args.get("city", "").strip()
+        if not cityname:
+            return render_template('predicts.html', cityname="Please enter a city", cities=cities)
+
         for item in cities:
             if item['name'] == cityname:
                 item['sel'] = 'selected'
-        print(cityname)
-        API_KEY = os.getenv("OPENWEATHER_API_KEY", "").strip()
 
-        if not API_KEY:
-            raise Exception("OPENWEATHER_API_KEY is not configured")
-
-        geo_url = "http://api.openweathermap.org/geo/1.0/direct"
-
-        params = {
-            "q": cityname,
-            "limit": 1,
-            "appid": API_KEY
-        }
-
-        response = requests.get(geo_url, params=params, timeout=10)
-        response.raise_for_status()
-        try:
-            data = response.json()
-        except ValueError:
-            raise Exception("Weather service returned an invalid response")
-
-        if not data:
-            raise Exception("City not found")
-
-        latitude = data[0]["lat"]
-        longitude = data[0]["lon"]
-        final = prediction.get_data(latitude, longitude)
-
+        weather_data = prediction.get_weather(cityname)
+        final = [
+            weather_data["temperature"],
+            weather_data["temp_max"],
+            weather_data["wind_speed"],
+            weather_data["clouds"],
+            weather_data["rainfall"],
+            weather_data["humidity"],
+        ]
         final[4] *= 15
-        # Ensure model is loaded and compatible
+
         if model is None:
-            raise Exception("Model not loaded. Retrain using training/train.py with current scikit-learn or place a compatible model.pickle in the project root.")
+            raise prediction.WeatherServiceError("Model not loaded")
 
         if str(model.predict([final])[0]) == "0":
             pred = "Safe"
         else:
             pred = "Unsafe"
 
-        return render_template('predicts.html', cityname="Information about " + cityname, cities=cities, temp=round(final[0], 2), maxt=round(final[1], 2), wspd=round(final[2], 2), cloudcover=round(final[3], 2), percip=round(final[4], 2), humidity=round(final[5], 2), pred = pred)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
+        return render_template(
+            'predicts.html',
+            cityname="Information about " + cityname,
+            cities=cities,
+            temp=round(weather_data["temperature"], 2),
+            maxt=round(weather_data["temp_max"], 2),
+            wspd=round(weather_data["wind_speed"], 2),
+            cloudcover=round(weather_data["clouds"], 2),
+            percip=round(weather_data["rainfall"], 2),
+            humidity=round(weather_data["humidity"], 2),
+            pressure=round(weather_data["pressure"], 2),
+            pred=pred,
+            weather_error=None,
+        )
+    except prediction.WeatherServiceError as exc:
+        if request.args.get("format") == "json" or request.accept_mimetypes.best == "application/json":
+            return jsonify({"error": str(exc)}), 503
+        weather_error = str(exc)
         return render_template(
             "predicts.html",
             cities=cities,
-            cityname=f"Error: {e}"
+            cityname=str(exc),
+            weather_error=weather_error,
         )
+    except Exception as exc:
+        if request.args.get("format") == "json" or request.accept_mimetypes.best == "application/json":
+            return jsonify({"error": str(exc)}), 503
+        return render_template(
+            "predicts.html",
+            cities=cities,
+            cityname=str(exc),
+            weather_error=str(exc),
+        )
+
+
+@app.route("/predict")
+def predict_json():
+    cityname = request.args.get("city", "").strip()
+    if not cityname:
+        return jsonify({"error": "Please provide a city name"}), 400
+
+    try:
+        weather_data = prediction.get_weather(cityname)
+        return jsonify(weather_data)
+    except prediction.WeatherServiceError as exc:
+        return jsonify({"error": str(exc)}), 503
+    except Exception as exc:
+        return jsonify({"error": str(exc)}), 503
 
 
 @app.route("/contact", methods=["POST"])

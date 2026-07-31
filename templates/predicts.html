@@ -195,6 +195,12 @@
                   ></i>
                 </div>
                 <h4>Flood Prediction</h4>
+                {% if weather_error %}
+                <div class="alert alert-warning" role="alert" style="margin-top: 16px;">
+                  {{ weather_error }}
+                </div>
+                {% endif %}
+
                 {% if pred == "Safe" %}
                 <h4 style="font-weight: 900;font-size: 40px;color:#41cf2e;">Safe</h4>
                   <h6 style="font-weight: 400;font-size: 20px;">The current predictive model indicates a low immediate flood risk for this location. Local conditions should still be monitored.</h6>
