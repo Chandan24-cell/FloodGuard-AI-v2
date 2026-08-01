@@ -12,6 +12,8 @@
 ![NASA GPM](https://img.shields.io/badge/Data-NASA%20GPM-1E88E5?style=for-the-badge&logo=nasa&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-FloodGuard_AI-00C2FF?style=for-the-badge)](https://floodguard-ai-v2.onrender.com/)
+[![Hosted on Render](https://img.shields.io/badge/Hosted_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://floodguard-ai-v2.onrender.com/)
 </div>
 
 ---
