@@ -63,6 +63,12 @@
       href="{{ url_for('static', filename='css/style.css') }}"
       rel="stylesheet"
     />
+
+    <!-- React Leaflet Map Bundle (built from static/frontend) -->
+    <link
+      href="{{ url_for('static', filename='frontend/dist/assets/index-a8337bbc.css') }}"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
@@ -190,6 +196,25 @@
         </div>
       </section>
       <!-- #about -->
+
+      <!--==========================
+      Interactive Flood Intelligence Map Section
+    ============================-->
+      <section id="map-section" class="section-bg">
+        <div class="container">
+          <header class="section-header">
+            <h3>Interactive Flood Intelligence Map</h3>
+            <p>
+              Explore live flood-prone zones, rainfall stations, and river-level
+              sensors in real time. Click any zone or marker for details.
+            </p>
+          </header>
+          <div class="react-map-page">
+            <div id="react-map"></div>
+          </div>
+        </div>
+      </section>
+      <!-- #map-section -->
 
       <!--==========================
       Services Section
@@ -627,5 +652,12 @@ FloodGuard AI is designed to support early warning systems, disaster preparednes
 
     <!-- Template Main Javascript File -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <!-- React Leaflet Map Bundle (built from static/frontend) -->
+    <script
+      type="module"
+      crossorigin
+      src="{{ url_for('static', filename='frontend/dist/assets/index-fbc67270.js') }}"
+    ></script>
   </body>
 </html>
