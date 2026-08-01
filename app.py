@@ -1,10 +1,12 @@
 """Web app."""
+import pandas as pd
+city_df = pd.read_csv("finalfinal.csv")
 import base64
 import flask
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_mail import Mail, Message
 import os
-import pickle
+import joblib
 
 from config import load_environment
 
@@ -50,7 +52,7 @@ months = [{"name":"May", "sel": ""}, {"name":"June", "sel": ""}, {"name":"July",
 cities = [{'name':'Delhi', "sel": "selected"}, {'name':'Mumbai', "sel": ""}, {'name':'Kolkata', "sel": ""}, {'name':'Bangalore', "sel": ""}, {'name':'Chennai', "sel": ""}, {'name':'New York', "sel": ""}, {'name':'Los Angeles', "sel": ""}, {'name':'London', "sel": ""}, {'name':'Paris', "sel": ""}, {'name':'Sydney', "sel": ""}, {'name':'Beijing', "sel": ""}]
 
 # Load ML model
-model = pickle.load(open("model.pickle", 'rb'))
+model = joblib.load("training/model.pickle")
 
 
 @app.route("/")
@@ -116,16 +118,26 @@ def get_predicts():
             if item['name'] == cityname:
                 item['sel'] = 'selected'
 
-        weather_data = prediction.get_weather(cityname)
-        final = [
-            weather_data["temperature"],
-            weather_data["temp_max"],
-            weather_data["wind_speed"],
-            weather_data["clouds"],
-            weather_data["rainfall"],
-            weather_data["humidity"],
+        row = city_df[
+            city_df["city"].str.lower() == cityname.lower()
         ]
-        final[4] *= 15
+
+        if row.empty:
+            return render_template(
+                "predicts.html",
+                cityname="City not found in dataset",
+                cities=cities
+            )
+
+        row = row.iloc[0]
+        final = [
+            float(row["lat"]),
+            float(row["lon"]),
+            float(row["precip"]),
+            float(row["pop"]),
+            float(row["damage"]),
+            float(row["cost"]),
+        ]
 
         if model is None:
             raise prediction.WeatherServiceError("Model not loaded")
@@ -137,15 +149,14 @@ def get_predicts():
 
         return render_template(
             'predicts.html',
-            cityname="Information about " + cityname,
+            cityname="Information about " + row["city"],
             cities=cities,
-            temp=round(weather_data["temperature"], 2),
-            maxt=round(weather_data["temp_max"], 2),
-            wspd=round(weather_data["wind_speed"], 2),
-            cloudcover=round(weather_data["clouds"], 2),
-            percip=round(weather_data["rainfall"], 2),
-            humidity=round(weather_data["humidity"], 2),
-            pressure=round(weather_data["pressure"], 2),
+            lat=round(float(row["lat"]), 2),
+            lon=round(float(row["lon"]), 2),
+            precip=round(float(row["precip"]), 2),
+            pop=row["pop"],
+            damage=round(float(row["damage"]), 2),
+            cost=round(float(row["cost"]), 2),
             pred=pred,
             weather_error=None,
         )
