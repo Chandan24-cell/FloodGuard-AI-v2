@@ -1,21 +1,48 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
 from sklearn.ensemble import RandomForestClassifier
-import pickle
+from sklearn.metrics import accuracy_score
+import joblib
 
-data = pd.read_csv("final_data.csv")
-y = data['class']
-X = data.drop('class', axis=1)
-X_train, X_test, y_train, y_test = train_test_split(X, y,test_size=0.2)
+# Load dataset
+df = pd.read_csv("finalfinal.csv")
 
-classifier = RandomForestClassifier(n_estimators = 50, criterion = 'entropy', random_state = 0)
+# Features
+X = df[[
+    "lat",
+    "lon",
+    "precip",
+    "pop",
+    "damage",
+    "cost"
+]]
 
-classifier.fit(X_train, y_train)
+# Target
+y = df["class"]
 
-pred = classifier.predict(X_test)
-accuracy = accuracy_score(y_test, pred)
+# Split
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42
+)
 
-print("accuracy: " + str(accuracy * 100) + "%")
+# Model
+model = RandomForestClassifier(
+    n_estimators=200,
+    random_state=42
+)
 
-pickle.dump(classifier, open('model.pickle', 'wb'))
+# Train
+model.fit(X_train, y_train)
+
+# Accuracy
+pred = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, pred))
+
+# Save model
+joblib.dump(model, "model.pickle")
+
+print("Model saved as model.pickle")
