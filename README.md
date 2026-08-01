@@ -6,14 +6,36 @@
 
 *Turning environmental and geospatial data into actionable intelligence for disaster preparedness and response.*
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-Web%20Framework-000000?style=for-the-badge&logo=flask&logoColor=white)
-![Machine Learning](https://img.shields.io/badge/Machine%20Learning-Predictive%20Models-orange?style=for-the-badge&logo=scikit-learn&logoColor=white)
-![NASA GPM](https://img.shields.io/badge/Data-NASA%20GPM-1E88E5?style=for-the-badge&logo=nasa&logoColor=white)
-![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
+<a href="https://www.python.org/" target="_blank">
+  <img src="https://img.shields.io/badge/Python-3.9%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python">
+</a>
 
-[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-FloodGuard_AI-00C2FF?style=for-the-badge)](https://floodguard-ai-v2.onrender.com/)
-[![Hosted on Render](https://img.shields.io/badge/Hosted_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://floodguard-ai-v2.onrender.com/)
+<a href="https://flask.palletsprojects.com/" target="_blank">
+  <img src="https://img.shields.io/badge/Flask-Web%20Framework-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask">
+</a>
+
+<a href="https://scikit-learn.org/" target="_blank">
+  <img src="https://img.shields.io/badge/Machine%20Learning-Predictive%20Models-orange?style=for-the-badge&logo=scikit-learn&logoColor=white" alt="Machine Learning">
+</a>
+
+<a href="https://gpm.nasa.gov/" target="_blank">
+  <img src="https://img.shields.io/badge/Data-NASA%20GPM-1E88E5?style=for-the-badge&logo=nasa&logoColor=white" alt="NASA GPM">
+</a>
+
+<a href="https://opensource.org/license/mit/" target="_blank">
+  <img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="MIT License">
+</a>
+
+<br><br>
+
+<a href="https://floodguard-ai-v2.onrender.com/" target="_blank">
+  <img src="https://img.shields.io/badge/🚀_Live_Demo-FloodGuard_AI-00C2FF?style=for-the-badge" alt="Live Demo">
+</a>
+
+<a href="https://render.com/" target="_blank">
+  <img src="https://img.shields.io/badge/Hosted_on-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Hosted on Render">
+</a>
+
 </div>
 
 ---
