@@ -1,0 +1,13 @@
+# Ignore third-party frontend libraries
+static/lib/** linguist-vendored
+
+# Ignore generated images
+processed_satellite_images/** linguist-generated
+
+# Ignore build artifacts
+*.pickle linguist-generated
+*.csv linguist-generated
+
+# Ignore cache
+__pycache__/** linguist-generated
+*.pyc linguist-generated
