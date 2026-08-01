@@ -159,7 +159,7 @@ flowchart LR
 ## Installation & Usage
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/Chandan24-cell/FloodGuard-AI-v2
 cd floodguard-ai
 
 python -m venv venv
@@ -198,11 +198,6 @@ floodguard-ai/
 
 ---
 
-<a id="screenshots"></a>
-## Frontend prototype (interactive Mapbox)
-
-A minimal React + Vite prototype is available under [static/frontend](/Users/chandankumarsah/Downloads/FloodML-master.worktrees/premium-3d-ui-ux-enhancements/static/frontend). It contains a Mapbox GL JS-based MapContainer and TimeSlider components to prototype the "premium 3D" experience.
-
 Quick notes:
 - Copy static/frontend/.env.example to static/frontend/.env and set REACT_APP_MAPBOX_TOKEN with a Mapbox token.
 - Install and run the prototype:
@@ -210,7 +205,7 @@ Quick notes:
   npm install
   npm run dev
 
-Then open the Vite dev URL (usually http://localhost:5173).
+Then open the Vite dev URL (usually http://127.0.0.1:5000).
 
 ## Screenshots
 
